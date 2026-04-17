@@ -6,4 +6,5 @@ set(CMAKE_CXX_STANDARD 14)
 include_directories(.)
 
 file(GLOB SOURCES "*.cpp")
-add_executable(tinySTL ${SOURCES})
+add_executable(tinySTL ${SOURCES}
+        vector.h)
