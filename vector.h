@@ -66,7 +66,7 @@ public:
 			size_type old_size=size();
 			size_type new_cap=(old_size==0)?1:2*old_size;
 			pointer old_begin_=begin_;
-        	pointer new_begin_=allocate(2*old_size);
+        	pointer new_begin_=allocate(new_cap);
 			for(size_type i=0;i<old_size;++i){
             	construct(new_begin_+i,old_begin_[i]);
 				destroy(old_begin_+i);
@@ -80,7 +80,7 @@ public:
   		++end_;
     }
     void pop_back(){
-		if(end_==nullptr) {
+		if(end_==begin_) {
 			throw std::out_of_range("vector::pop_back");
 		}
   		--end_;
