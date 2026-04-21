@@ -7,7 +7,7 @@
 #include<stdexcept>
 #include<new>
 #include"constuct.h"
-
+#include"allocator.h"
 namespace tinySTL{
 
 template<typename T>
@@ -25,22 +25,13 @@ private:
   	pointer begin_; //data
     pointer end_;
     pointer cap_;
-	//Memory primitives 内存操作
-    //allocate raw memory for n objects of typeT,without constructing them
-    pointer allocate(size_t n){
-     	return static_cast<pointer>(::operator new(n*sizeof(T)));
-    }
-    //Release memory allocated by allocate
-    void deallocate(pointer p){
-      	::operator delete(p);
-    }
 
 public:
  	//Construct&Distruct
   	vector():begin_(nullptr),end_(nullptr),cap_(nullptr){}
     ~vector(){
 		destroy(begin_,end_);
-        deallocate(begin_);
+        allocator<T>::deallocate(begin_,cap_-begin_);
     }
     //capacity
     size_type size() const{ return end_-begin_;}
@@ -63,12 +54,12 @@ public:
 			size_type old_size=size();
 			size_type new_cap=(old_size==0)?1:2*old_size;
 			pointer old_begin_=begin_;
-        	pointer new_begin_=allocate(new_cap);
+        	pointer new_begin_=allocator<T>::allocate(new_cap);
 			for(size_type i=0;i<old_size;++i){
             	construct(new_begin_+i,old_begin_[i]);
 			}
 			destroy(old_begin_,old_begin_+old_size);
-			deallocate(old_begin_);
+			allocator<T>::deallocate(old_begin_,cap_-begin_);
 			begin_=new_begin_;
 			end_=new_begin_+old_size;
 			cap_=new_begin_+new_cap;
