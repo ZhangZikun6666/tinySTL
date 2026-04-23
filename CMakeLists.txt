@@ -8,5 +8,5 @@ include_directories(.)
 file(GLOB SOURCES "*.cpp")
 add_executable(tinySTL ${SOURCES}
         vector.h
-        constuct.h
+        construct.h
         allocator.h)

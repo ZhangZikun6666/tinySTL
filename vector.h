@@ -6,7 +6,7 @@
 #include<cstddef>
 #include<stdexcept>
 #include<new>
-#include"constuct.h"
+#include"construct.h"
 #include"allocator.h"
 namespace tinySTL{
 
