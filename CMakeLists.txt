@@ -9,4 +9,5 @@ file(GLOB SOURCES "*.cpp")
 add_executable(tinySTL ${SOURCES}
         vector.h
         construct.h
-        allocator.h)
+        allocator.h
+        uninitiallized.h)

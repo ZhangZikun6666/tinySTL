@@ -8,6 +8,8 @@
 #include<new>
 #include"construct.h"
 #include"allocator.h"
+#include "uninitiallized.h"
+
 namespace tinySTL{
 
 template<typename T>
@@ -55,9 +57,7 @@ public:
 			size_type new_cap=(old_size==0)?1:2*old_size;
 			pointer old_begin_=begin_;
         	pointer new_begin_=allocator<T>::allocate(new_cap);
-			for(size_type i=0;i<old_size;++i){
-            	construct(new_begin_+i,old_begin_[i]);
-			}
+			uninitialized_copy(begin_,begin_+old_size,new_begin_);
 			destroy(old_begin_,old_begin_+old_size);
 			allocator<T>::deallocate(old_begin_,cap_-begin_);
 			begin_=new_begin_;
