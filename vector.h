@@ -74,5 +74,22 @@ public:
   		--end_;
   		destroy(end_);
   	}
+public:
+	void swap(vector& rhs) {
+		std::swap(this->begin_,rhs.begin_);
+		std::swap(this->end_,rhs.end_);
+		std::swap(this->cap_,rhs.cap_);
+	}
+	vector(const vector& rhs): begin_(nullptr), end_(nullptr), cap_(nullptr) {
+	    begin_ = allocator<T>::allocate(rhs.size());
+	    end_=uninitialized_copy(rhs.begin_, rhs.end_, begin_);//这就是为什么uninitialized_copy有返回值
+		cap_=begin_+rhs.size();
+    }
+	//假设我们这里传引用 直接把this和rhs swap会导致rhs被污染(假设rhs后面还有用)
+	//但是如果直接传值 是调用默认拷贝构造函数创造临时对象 不会影响外部rhs
+	vector& operator=(vector rhs){
+		this->swap(rhs);
+		return *this;
+	}
 };
 }
