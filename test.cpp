@@ -12,12 +12,23 @@ int main(){
           v.push_back(i);
      }
      for(int i=0;i<v.size();i++) {
-          cout<<v[i]<<endl;
+          cout<<v[i]<<" ";
      }
+     cout<<'\n';
      tinySTL::vector<int> v1;
      tinySTL::vector<int> v2;
      v1.push_back(1);
      v2=v1;
      cout<<v1[0]<<" "<<v2[0]<<'\n';
+     v.erase(v.begin());
+     for(int i=0;i<v.size();i++) {
+          cout<<v[i]<<" ";
+     }
+     cout<<'\n';
+     v.insert(v.begin(),999);
+     for(int i=0;i<v.size();i++) {
+          cout<<v[i]<<" ";
+     }
+     cout<<'\n';
      return 0;
 }
