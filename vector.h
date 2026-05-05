@@ -6,6 +6,7 @@
 #include<cstddef>
 #include<stdexcept>
 #include<new>
+#include<initializer_list>
 #include"construct.h"
 #include"allocator.h"
 #include "uninitiallized.h"
@@ -105,7 +106,16 @@ public:
 		if(this!=&rhs) this->swap(rhs);
 		return *this;
 	}
+	//支持列表初始化
+	vector(std::initializer_list<T> list):begin_(nullptr),end_(nullptr),cap_(nullptr){
+		//list是一个现成数组 具有begin等
+		begin_=allocator<T>::allocate(list.size());
+		end_=uninitialized_copy(list.begin(),list.end(),begin_); //copy函数会返回最后赋值的指针 可以利用这个特性直接给end_赋值
+		cap_=begin_+list.size();
+
+	}
 public:
+	//删除操作
 	iterator erase(iterator pos) {
 		if(pos==end_) return pos;
 		for(iterator it=pos+1;it!=end_;++it) {
@@ -115,6 +125,7 @@ public:
 		destroy(end_);//end_原本指向的内存就是空的 --之后就是因为erase而空出来的内存 直接destroy即可
 		return pos;
 	}
+	//插入操作
 	iterator insert(iterator pos,const T& val) {
 		size_type offset=pos-begin_;
 		if(end_!=cap_) {
@@ -146,6 +157,20 @@ public:
 			return new_begin+offset;
 		}
 
+	}
+public:
+	//更新容器大小操作
+	void reserve(size_type n) {
+		if(n>capacity()) {
+			pointer new_begin=allocator<T>::allocate(n);
+			size_type old_size=size();
+			uninitialized_copy(begin_,end_,new_begin);
+			destroy(begin_,end_);
+			allocator<T>::deallocate(begin_,cap_-begin_);
+			begin_=new_begin;
+			end_=new_begin+old_size;
+			cap_=new_begin+n;
+		}
 	}
 };
 }

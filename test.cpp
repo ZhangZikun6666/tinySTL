@@ -25,10 +25,15 @@ int main(){
           cout<<v[i]<<" ";
      }
      cout<<'\n';
+     v.reserve(100);
      v.insert(v.begin(),999);
      for(int i=0;i<v.size();i++) {
           cout<<v[i]<<" ";
      }
-     cout<<'\n';
+     cout<<'\n'<<v.capacity()<<'\n';
+     v={1,2,3,4,5};
+     for(int i=0;i<v.size();i++) {
+          cout<<v[i]<<" ";
+     }
      return 0;
 }
