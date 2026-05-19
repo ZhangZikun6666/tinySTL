@@ -6,6 +6,7 @@
 #include<cstddef>
 #include<stdexcept>
 #include<new>
+#include <utility>
 #include<initializer_list>
 #include"construct.h"
 #include"allocator.h"
@@ -76,6 +77,7 @@ public:
   		destroy(end_);
   	}
 public:
+	//noexcept承诺不会抛出异常
 	void swap(vector& rhs) noexcept {
 		std::swap(this->begin_,rhs.begin_);
 		std::swap(this->end_,rhs.end_);
@@ -95,7 +97,8 @@ public:
 		}
 		return *this;
 	}
-
+	//移动构造和移动赋值都会接受std::move(tmp) 
+	//“移动”的做法会导致原数组tmp发生析构 因为右值是临时对象 被赋值的数组的指针交给rhs后在函数作用域外会消亡
 	//移动构造函数 &&表示右值引用 也就是马上会消亡
 	vector(vector&& rhs) noexcept:begin_(nullptr),end_(nullptr),cap_(nullptr){
 		this->swap(rhs);
@@ -103,7 +106,7 @@ public:
 	//移动赋值运算符用于接受std::move所产生的右值
 	//如果使用传统的移动赋值 会先把自己的内存 deallocate 掉。转身去抢 rhs 的内存（但 rhs就是自己，内存已经被清空了）最终把一个空指针塞给自己，导致数据完全丢失。
     vector &operator=(vector&& rhs) noexcept{
-		if(this!=&rhs) this->swap(rhs);
+		this->swap(rhs);
 		return *this;
 	}
 	//支持列表初始化

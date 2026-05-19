@@ -10,4 +10,5 @@ add_executable(tinySTL ${SOURCES}
         vector.h
         construct.h
         allocator.h
-        uninitiallized.h)
+        uninitiallized.h
+        )

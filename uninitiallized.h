@@ -19,9 +19,9 @@ namespace tinySTL {
         }
     }
     template<class ForwardIterator,class Size,class T>
-    ForwardIterator uninitialized_fill_n(ForwardIterator first,const Size &n,const T& val) {
-        while(n--){
-            first=construct(&*first,val);
+    ForwardIterator uninitialized_fill_n(ForwardIterator first, Size n, const T& val) {
+        for (Size i = 0; i < n; ++i) {
+            construct(&*first, val);
             ++first;
         }
         return first;
